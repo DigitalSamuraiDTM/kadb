@@ -1,6 +1,7 @@
-package com.digitalsamurai.kadb.client.provider
+package com.digitalsamurai.kadb.client.provider.network
 
 import com.digitalsamurai.kadb.client.Device
+import com.digitalsamurai.kadb.client.provider.AdbCommandProvider
 
 class NetworkCommandProvider() : AdbCommandProvider {
     override suspend fun sendCommand(command: String): String {

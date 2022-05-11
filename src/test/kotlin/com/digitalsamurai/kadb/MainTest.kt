@@ -2,19 +2,18 @@ package com.digitalsamurai.kadb
 
 import com.digitalsamurai.kadb.client.AdbClient
 import com.digitalsamurai.kadb.client.AdbClientBuilder
-import com.digitalsamurai.kadb.client.provider.NetworkCommandProvider
-import com.digitalsamurai.kadb.client.provider.TerminalCommandProvider
+import com.digitalsamurai.kadb.client.Device
+import com.digitalsamurai.kadb.client.provider.terminal.TerminalCommandProvider
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class MainTest  {
     private lateinit var test : AdbClient
-    private var k : String = ""
+
     @BeforeEach
     internal fun before(){
-        val test  = AdbClientBuilder.Builder()
-            .setAdbPath("D:\\po\\sdk\\platform-tools\\adb.exe")
+        test  = AdbClientBuilder.Builder("C:\\Users\\andre\\AppData\\Local\\Android\\Sdk\\platform-tools\\")
             .setAutoStartAdbServer(true)
             .setCommandProvider(TerminalCommandProvider())
             .build()
@@ -22,6 +21,11 @@ class MainTest  {
 
     @Test
     internal fun main() = runBlocking {
-        println(test.sendCommand("obema"))
+
+        test.getDevices().forEach {
+            test.installApkOnDevice(it,"C:\\Users\\andre\\Desktop\\.partner\\PartnerApp2\\app\\build\\outputs\\apk\\debug\\a.apk")
+        }
+
+
     }
 }

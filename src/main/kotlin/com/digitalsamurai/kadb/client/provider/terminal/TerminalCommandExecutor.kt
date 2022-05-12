@@ -1,10 +1,10 @@
-package com.digitalsamurai.kadb.client.provider
+package com.digitalsamurai.kadb.client.provider.terminal
 
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import kotlin.streams.toList
 
-internal class TerminalCommandExecutor{
+internal object TerminalCommandExecutor{
 
 
 

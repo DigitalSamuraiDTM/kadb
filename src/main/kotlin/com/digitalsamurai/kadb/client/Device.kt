@@ -2,21 +2,21 @@ package com.digitalsamurai.kadb.client
 
 class Device {
     var serial : String
-        private set
+        internal set
     var status : DeviceStatus? = null
-        private set
+        internal set
 
     var product : String? = null
-        private set
+        internal set
 
     var model : String?  = null
-        private set
+        internal set
 
     var device : String? = null
-        private set
+        internal set
 
     var transportId : Int? = null
-        private set
+        internal set
 
 
 

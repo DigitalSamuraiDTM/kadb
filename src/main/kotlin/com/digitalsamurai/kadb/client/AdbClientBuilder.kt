@@ -1,43 +1,54 @@
 package com.digitalsamurai.kadb.client
 
-import com.digitalsamurai.kadb.client.provider.AdbCommandProvider
-import com.digitalsamurai.kadb.client.provider.TerminalCommandExecutor
+import com.digitalsamurai.kadb.client.provider.commands.AdbCommandProvider
+import com.digitalsamurai.kadb.client.provider.terminal.shell.ShellTerminalCommandsImpl
 import com.digitalsamurai.kadb.client.provider.terminal.TerminalCommandProvider
+import com.digitalsamurai.kadb.client.provider.terminal.shell.activitymanager.ActivityManagerTerminalCommandsImpl
+import com.digitalsamurai.kadb.client.provider.terminal.shell.uiautomator.UiAutomatorTerminalCommandsImpl
 
 class AdbClientBuilder {
-    class Builder(adbPath : String){
-        private var adbPath : String = "adb "
-        private var commandProvider : AdbCommandProvider = TerminalCommandProvider()
+
+    /**
+     * if u have adb in environment u can skip [adbPath] argument
+     */
+    class Builder(adbPath : String = ""){
+        private var adbPath : String = "${adbPath}\\adb"
+        private var commandProvider : AdbCommandProvider
         private var isAuto = false
 
+        //for default use terminal for providing requests
         init {
-            this.adbPath = adbPath
+            commandProvider  = TerminalCommandProvider(this.adbPath,
+                ShellTerminalCommandsImpl(this.adbPath,ActivityManagerTerminalCommandsImpl(this.adbPath),UiAutomatorTerminalCommandsImpl(this.adbPath)))
         }
 
-        fun setAutoStartAdbServer(isAuto : Boolean) : Builder{
+        private fun setAutoStartAdbServer(isAuto : Boolean) : Builder{
             this.isAuto = isAuto
             return this
         }
 
-        fun setCommandProvider(provider : AdbCommandProvider) : Builder{
-            this.commandProvider = provider
-            when(provider){
-                is TerminalCommandProvider->{provider.setExecutorPath(adbPath)}
+        fun setCommandProvider(typeProvider : CommandProvider) : Builder{
+            when(typeProvider){
+                CommandProvider.TERMINAL->{
+                    this.commandProvider = TerminalCommandProvider(adbPath,
+                        ShellTerminalCommandsImpl(adbPath,ActivityManagerTerminalCommandsImpl(this.adbPath),UiAutomatorTerminalCommandsImpl(this.adbPath)))
+                }
+//                CommandProvider.NETWORK->{
+//                    this.commandProvider = NetworkCommandProvider()
+//                }
             }
+
             return this
         }
 
-        private fun setAdbPath(path : String) : Builder{
-            this.adbPath = "$path "
-            return this
-        }
 
-        fun build() : AdbClient{
+
+        fun build() : AdbClient {
             val client = AdbClient(adbPath,commandProvider)
-            if (isAuto){
-                // TODO: 06.05.2022
-            }
             return client
         }
+    }
+    enum class CommandProvider{
+        TERMINAL
     }
 }

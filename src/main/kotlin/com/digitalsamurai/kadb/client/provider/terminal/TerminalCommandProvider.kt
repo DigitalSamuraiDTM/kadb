@@ -10,8 +10,14 @@ class TerminalCommandProvider internal constructor(path : String,override val Sh
     private var adbPath = path
 
 
+    /**
+     * send [command] without word "adb".
+     *  Don't need device or serial because user can send it.
+     *  Always return true because doesn't have any filters or mappers
+     */
     override suspend fun sendCommand(command: String): RequestResponse<String> {
-        TODO("Not yet implemented")
+        val answer = TerminalCommandExecutor.executeTerminalCommandForString(arrayListOf(adbPath,command))
+        return RequestResponse(true,answer,answer)
     }
 
     override suspend fun getDevices(): RequestResponse<List<Device>> {
@@ -50,7 +56,7 @@ class TerminalCommandProvider internal constructor(path : String,override val Sh
 
 
     override suspend fun pullFileFromDevice(serial: String, deviceFilePath: String, savePath: String?): RequestResponse<Pair<Int,Int>?> {
-        val answer = TerminalCommandExecutor.executeTerminalCommandForArray(arrayListOf(adbPath, "pull", deviceFilePath).also {
+        val answer = TerminalCommandExecutor.executeTerminalCommandForArray(arrayListOf(adbPath,"-s",serial, "pull", deviceFilePath).also {
             if (savePath!=null){it.add(savePath)}
         })
         return if (answer.size==1){
@@ -62,12 +68,12 @@ class TerminalCommandProvider internal constructor(path : String,override val Sh
         }
     }
 
-    override suspend fun uninstallApkOnDevice(serial: String, path: String) {
-        TODO("Not yet implemented")
+    override suspend fun uninstallApkOnDevice(serial: String, packageName: String) {
+        val answer = TerminalCommandExecutor.executeTerminalCommandForArray(arrayListOf(adbPath,"-s",serial,"uninstall", packageName))
     }
 
-    override suspend fun installApkOnDevice(device: Device, filePath: String) : RequestResponse<Boolean> {
-        return installApkOnDevice(device.serial,filePath)
+    override suspend fun installApkOnDevice(device: Device, path: String) : RequestResponse<Boolean> {
+        return installApkOnDevice(device.serial,path)
     }
 
     override suspend fun pullFileFromDevice(device: Device, deviceFilePath: String, savePath : String?): RequestResponse<Pair<Int,Int>?> {
@@ -75,12 +81,9 @@ class TerminalCommandProvider internal constructor(path : String,override val Sh
     }
 
 
-    override suspend fun uninstallApkOnDevice(device: Device, path: String) {
-        uninstallApkOnDevice(device.serial,path)
+    override suspend fun uninstallApkOnDevice(device: Device, packageName: String) {
+        uninstallApkOnDevice(device.serial,packageName)
     }
-
-
-
 
     private fun parseDeviceFromString(deviceString : String) : Device {
         val serial = deviceString.substringBefore(" ")

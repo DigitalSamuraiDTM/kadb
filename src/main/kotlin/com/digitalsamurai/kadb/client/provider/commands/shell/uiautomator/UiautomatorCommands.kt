@@ -8,7 +8,7 @@ interface UiautomatorCommands {
     /**
      * [savePath] by default is /sdcard/window_dump.xml
      */
-    fun dump(device :Device, savePath : String = "") : RequestResponse<String> // TODO: 12.05.2022
+    fun dump(device :Device, savePath : String = "") : RequestResponse<String?>
 
-    fun dump(serial :String, savePath : String = "") : RequestResponse<String> // TODO: 12.05.2022
+    fun dump(serial :String, savePath : String = "") : RequestResponse<String?>
 }

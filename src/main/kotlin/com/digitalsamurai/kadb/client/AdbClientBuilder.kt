@@ -1,9 +1,11 @@
 package com.digitalsamurai.kadb.client
 
 import com.digitalsamurai.kadb.client.provider.commands.AdbCommandProvider
+import com.digitalsamurai.kadb.client.provider.commands.shell.dumpsys.DumpsysCommands
 import com.digitalsamurai.kadb.client.provider.terminal.shell.ShellTerminalCommandsImpl
 import com.digitalsamurai.kadb.client.provider.terminal.TerminalCommandProvider
 import com.digitalsamurai.kadb.client.provider.terminal.shell.activitymanager.ActivityManagerTerminalCommandsImpl
+import com.digitalsamurai.kadb.client.provider.terminal.shell.dumpsys.DumpsysTerminalCommandsImpl
 import com.digitalsamurai.kadb.client.provider.terminal.shell.uiautomator.UiAutomatorTerminalCommandsImpl
 
 class AdbClientBuilder {
@@ -19,7 +21,9 @@ class AdbClientBuilder {
         //for default use terminal for providing requests
         init {
             commandProvider  = TerminalCommandProvider(this.adbPath,
-                ShellTerminalCommandsImpl(this.adbPath,ActivityManagerTerminalCommandsImpl(this.adbPath),UiAutomatorTerminalCommandsImpl(this.adbPath)))
+                ShellTerminalCommandsImpl(this.adbPath,ActivityManagerTerminalCommandsImpl(this.adbPath),
+                    UiAutomatorTerminalCommandsImpl(this.adbPath),
+                    DumpsysTerminalCommandsImpl(this.adbPath)))
         }
 
         private fun setAutoStartAdbServer(isAuto : Boolean) : Builder{
@@ -31,7 +35,9 @@ class AdbClientBuilder {
             when(typeProvider){
                 CommandProvider.TERMINAL->{
                     this.commandProvider = TerminalCommandProvider(adbPath,
-                        ShellTerminalCommandsImpl(adbPath,ActivityManagerTerminalCommandsImpl(this.adbPath),UiAutomatorTerminalCommandsImpl(this.adbPath)))
+                        ShellTerminalCommandsImpl(adbPath,ActivityManagerTerminalCommandsImpl(this.adbPath),
+                            UiAutomatorTerminalCommandsImpl(this.adbPath),
+                            DumpsysTerminalCommandsImpl(adbPath)))
                 }
 //                CommandProvider.NETWORK->{
 //                    this.commandProvider = NetworkCommandProvider()

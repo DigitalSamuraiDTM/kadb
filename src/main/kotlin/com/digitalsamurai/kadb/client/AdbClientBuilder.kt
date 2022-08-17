@@ -24,7 +24,7 @@ class AdbClientBuilder {
             commandProvider  = TerminalCommandProvider(this.adbPath,
                 ShellTerminalCommandsImpl(this.adbPath,ActivityManagerTerminalCommandsImpl(this.adbPath),
                     UiAutomatorTerminalCommandsImpl(this.adbPath),
-                    DumpsysTerminalCommandsImpl(this.adbPath, BatteryTerminalCommandsImpl())))
+                    DumpsysTerminalCommandsImpl(this.adbPath, BatteryTerminalCommandsImpl(this.adbPath))))
         }
 
         private fun setAutoStartAdbServer(isAuto : Boolean) : Builder{
@@ -38,7 +38,7 @@ class AdbClientBuilder {
                     this.commandProvider = TerminalCommandProvider(adbPath,
                         ShellTerminalCommandsImpl(adbPath,ActivityManagerTerminalCommandsImpl(this.adbPath),
                             UiAutomatorTerminalCommandsImpl(this.adbPath),
-                            DumpsysTerminalCommandsImpl(adbPath,BatteryTerminalCommandsImpl())))
+                            DumpsysTerminalCommandsImpl(adbPath,BatteryTerminalCommandsImpl(this.adbPath))))
                 }
 //                CommandProvider.NETWORK->{
 //                    this.commandProvider = NetworkCommandProvider()

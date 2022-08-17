@@ -2,7 +2,6 @@ package com.digitalsamurai.kadb.client.provider.commands.shell.dumpsys
 
 import com.digitalsamurai.kadb.client.Device
 import com.digitalsamurai.kadb.client.provider.commands.shell.dumpsys.battery.BatteryCommands
-import com.digitalsamurai.kadb.client.provider.requestresponse.BatteryInfo
 import com.digitalsamurai.kadb.client.provider.requestresponse.MemoryInfo
 import com.digitalsamurai.kadb.client.provider.requestresponse.RequestResponse
 

@@ -17,7 +17,7 @@ class MainTesting  {
 
     @Before
     internal fun before(){
-        test  = AdbClientBuilder.Builder("C:\\Users\\andre\\AppData\\Local\\Android\\Sdk\\platform-tools\\")
+        test  = AdbClientBuilder.Builder("D:\\po\\sdk\\platform-tools\\")
             .setCommandProvider(AdbClientBuilder.CommandProvider.TERMINAL)
             .build()
     }
@@ -28,9 +28,14 @@ class MainTesting  {
         println(test.startAdbServer())
         val answer = test.getDevices()
 
+        answer.data.forEach {
+            println(test.Shell.Dumpsys.Battery.getInfoBatteryOnDevice(it))
+            delay(2000)
+            println(test.Shell.Dumpsys.Battery.setBatteryLevel(it,50))
+            delay(2000)
+            println(test.Shell.Dumpsys.Battery.resetBatteryOnDevice(it))
 
-//
-        println(test.stopAdbServer())
+        }
 
         assert(true)
 

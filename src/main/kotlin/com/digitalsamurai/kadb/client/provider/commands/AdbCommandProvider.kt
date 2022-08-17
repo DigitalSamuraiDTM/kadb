@@ -3,6 +3,7 @@ package com.digitalsamurai.kadb.client.provider.commands
 import com.digitalsamurai.kadb.client.Device
 import com.digitalsamurai.kadb.client.provider.commands.shell.ShellCommands
 import com.digitalsamurai.kadb.client.provider.requestresponse.RequestResponse
+import kotlinx.coroutines.flow.Flow
 
 interface AdbCommandProvider {
 
@@ -21,6 +22,14 @@ interface AdbCommandProvider {
 
     suspend fun pullFileFromDevice(device: Device, deviceFilePath : String, savePath : String?=null) : RequestResponse<Pair<Int, Int>?>
     suspend fun pullFileFromDevice(serial: String , deviceFilePath : String, savePath : String?=null): RequestResponse<Pair<Int, Int>?>
+
+    //adb -s "serial" reboot
+    suspend fun rebootDevice(device: Device) : RequestResponse<Boolean>
+    suspend fun rebootDevice(serial: String) : RequestResponse<Boolean>
+
+    //adb -s "serial" logcat
+    suspend fun observeLogcatDevice(device: Device) : RequestResponse<Flow<String>>
+    suspend fun observeLogcatDevice(serial: String) : RequestResponse<Flow<String>>
 
 
 

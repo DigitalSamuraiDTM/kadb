@@ -4,6 +4,10 @@ import com.digitalsamurai.kadb.client.Device
 import com.digitalsamurai.kadb.client.provider.commands.AdbCommandProvider
 import com.digitalsamurai.kadb.client.provider.commands.shell.ShellCommands
 import com.digitalsamurai.kadb.client.provider.requestresponse.RequestResponse
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 
 class TerminalCommandProvider internal constructor(path : String,override val Shell: ShellCommands) : AdbCommandProvider {
 
@@ -18,6 +22,36 @@ class TerminalCommandProvider internal constructor(path : String,override val Sh
     override suspend fun sendCommand(command: String): RequestResponse<String> {
         val answer = TerminalCommandExecutor.executeTerminalCommandForString(arrayListOf(adbPath,command))
         return RequestResponse(true,answer,answer)
+    }
+
+    override suspend fun rebootDevice(device: Device): RequestResponse<Boolean> {
+        return rebootDevice(device.serial)
+    }
+
+    override suspend fun rebootDevice(serial: String): RequestResponse<Boolean> {
+        val command = arrayListOf(adbPath,"-s",serial,"reboot")
+        val out = TerminalCommandExecutor.executeTerminalCommandForArray(command)
+        return RequestResponse(true,"",true)
+    }
+
+    override suspend fun observeLogcatDevice(device: Device): RequestResponse<Flow<String>> {
+        return observeLogcatDevice(device.serial)
+    }
+
+    override suspend fun observeLogcatDevice(serial: String): RequestResponse<Flow<String>> {
+        val command = listOf(adbPath,"-s",serial,"logcat")
+        val reader = TerminalCommandExecutor.observeTerminalCommand(command)
+
+        var o : String? = null
+        val flow = flow {
+            do {
+                o = reader.readLine()
+                if (o != null) {
+                    emit(o!!)
+                }
+            } while (o != null)
+        }.flowOn(Dispatchers.IO)
+        return  RequestResponse(true, clearAnswer = "",flow)
     }
 
     override suspend fun getDevices(): RequestResponse<List<Device>> {
@@ -38,9 +72,9 @@ class TerminalCommandProvider internal constructor(path : String,override val Sh
         val out = TerminalCommandExecutor.executeTerminalCommandForArray(command)
         val deviceString = out.find { it.contains(serial) }
         return if (deviceString==null){
-            return RequestResponse(false,"Device not found",null)
+            RequestResponse(false,"Device not found",null)
         } else{
-            return RequestResponse(true,deviceString,parseDeviceFromString(deviceString))
+            RequestResponse(true,deviceString,parseDeviceFromString(deviceString))
         }
     }
 

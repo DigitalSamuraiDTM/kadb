@@ -6,6 +6,7 @@ import com.digitalsamurai.kadb.client.provider.terminal.shell.ShellTerminalComma
 import com.digitalsamurai.kadb.client.provider.terminal.TerminalCommandProvider
 import com.digitalsamurai.kadb.client.provider.terminal.shell.activitymanager.ActivityManagerTerminalCommandsImpl
 import com.digitalsamurai.kadb.client.provider.terminal.shell.dumpsys.DumpsysTerminalCommandsImpl
+import com.digitalsamurai.kadb.client.provider.terminal.shell.dumpsys.battery.BatteryTerminalCommandsImpl
 import com.digitalsamurai.kadb.client.provider.terminal.shell.uiautomator.UiAutomatorTerminalCommandsImpl
 
 class AdbClientBuilder {
@@ -23,7 +24,7 @@ class AdbClientBuilder {
             commandProvider  = TerminalCommandProvider(this.adbPath,
                 ShellTerminalCommandsImpl(this.adbPath,ActivityManagerTerminalCommandsImpl(this.adbPath),
                     UiAutomatorTerminalCommandsImpl(this.adbPath),
-                    DumpsysTerminalCommandsImpl(this.adbPath)))
+                    DumpsysTerminalCommandsImpl(this.adbPath, BatteryTerminalCommandsImpl())))
         }
 
         private fun setAutoStartAdbServer(isAuto : Boolean) : Builder{
@@ -37,7 +38,7 @@ class AdbClientBuilder {
                     this.commandProvider = TerminalCommandProvider(adbPath,
                         ShellTerminalCommandsImpl(adbPath,ActivityManagerTerminalCommandsImpl(this.adbPath),
                             UiAutomatorTerminalCommandsImpl(this.adbPath),
-                            DumpsysTerminalCommandsImpl(adbPath)))
+                            DumpsysTerminalCommandsImpl(adbPath,BatteryTerminalCommandsImpl())))
                 }
 //                CommandProvider.NETWORK->{
 //                    this.commandProvider = NetworkCommandProvider()

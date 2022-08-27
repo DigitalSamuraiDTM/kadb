@@ -20,6 +20,7 @@ interface AdbCommandProvider {
 
     suspend fun getDeviceBySerial(serial :String) : RequestResponse<Device?>
 
+    //adb pull -a /sdcard/screen.png D:/work/screen.png
     suspend fun pullFileFromDevice(device: Device, deviceFilePath : String, savePath : String?=null) : RequestResponse<Pair<Int, Int>?>
     suspend fun pullFileFromDevice(serial: String , deviceFilePath : String, savePath : String?=null): RequestResponse<Pair<Int, Int>?>
 
@@ -30,7 +31,6 @@ interface AdbCommandProvider {
     //adb -s "serial" logcat
     suspend fun observeLogcatDevice(device: Device) : RequestResponse<Flow<String>>
     suspend fun observeLogcatDevice(serial: String) : RequestResponse<Flow<String>>
-
 
 
 }

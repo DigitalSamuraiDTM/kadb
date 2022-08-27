@@ -2,9 +2,8 @@ package com.digitalsamurai.kadb
 
 import com.digitalsamurai.kadb.client.AdbClient
 import com.digitalsamurai.kadb.client.AdbClientBuilder
-import com.digitalsamurai.kadb.client.provider.terminal.TerminalCommandExecutor
+import com.digitalsamurai.kadb.client.provider.commands.shell.input.keyevents.AdbKeyCode
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -29,11 +28,8 @@ class MainTesting  {
         val answer = test.getDevices()
 
         answer.data.forEach {
-            println(test.Shell.Dumpsys.Battery.getInfoBatteryOnDevice(it))
-            delay(2000)
-            println(test.Shell.Dumpsys.Battery.setBatteryLevel(it,50))
-            delay(2000)
-            println(test.Shell.Dumpsys.Battery.resetBatteryOnDevice(it))
+
+                println(test.Shell.screenshotOnDevice(it,"/sdcard/pyk.png").clearAnswer)
 
         }
 

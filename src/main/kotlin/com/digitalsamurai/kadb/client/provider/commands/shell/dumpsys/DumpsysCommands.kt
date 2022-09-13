@@ -9,8 +9,8 @@ interface DumpsysCommands {
     
     val Battery : BatteryCommands
     
-    suspend fun getInfoMemoryOnDevice(device : Device) : RequestResponse<MemoryInfo> // TODO: 13.05.2022  
-    suspend fun getInfoMemoryOnDevice(serial : String) : RequestResponse<MemoryInfo> // TODO: 13.05.2022  
+    suspend fun getInfoMemoryOnDevice(device : Device) : RequestResponse<MemoryInfo>
+    suspend fun getInfoMemoryOnDevice(serial : String) : RequestResponse<MemoryInfo>
     
 
 

@@ -27,12 +27,17 @@ class MainTesting  {
         println(test.startAdbServer())
         val answer = test.getDevices()
 
-        answer.data.forEach {
+//        answer.data.forEach {
 
-                println(test.Shell.screenshotOnDevice(it,"/sdcard/pyk.png").clearAnswer)
+//                println(test.Shell.screenshotOnDevice(it,"/sdcard/pyk.png").clearAnswer)
+
+//        }
+        answer.data.forEach {
+            test.Shell.ActivityManager.startService(it,"com.digitalsamurai.kratorapp/.ForegoundServiceChecker")
+            delay(10000)
+            test.Shell.ActivityManager.stopService(it,"com.digitalsamurai.kratorapp/.ForegoundServiceChecker")
 
         }
-
         assert(true)
 
     }
